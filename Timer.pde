@@ -4,12 +4,12 @@ class Timer
   private float t_rem;
   private int lane_id;
   private int curr_task;
-  private Boolean isPaused = false;
+  private Boolean isPaused = true;
  
   public Timer(int lane_id)
   {
    this.lane_id = lane_id;
-   this.t_rem = 0.0f;
+   this.t_rem = 0.0f;   
    this.curr_task = 0;
   }
   
@@ -21,10 +21,11 @@ class Timer
   
   public void ResetCurrent()
   {
-    t_rem = t_que.get(t_que.size() - 1);
+    t_rem = t_que.get(curr_task - 1);
+    isPaused = true;    
   }
   
-  public void ResetTimer()
+  public void ClearTasks()
   {
     t_que.clear();
     t_rem = 0.0f;
@@ -32,27 +33,26 @@ class Timer
   
   public void StartTimer()
   {
-    if(t_rem == 0 && t_que.size() > 0)
+    if(t_rem <= 0 && curr_task < t_que.size())
     {
-      t_rem = t_que.get(0);
+      t_rem = t_que.get(curr_task);
+      curr_task++;
+      
+      //t_que.remove(0);
     }
     
     isPaused = false;    
   }
   
   public void UpdateTimer(float dt)
-  {
-    if(!isPaused)
-    {
-      t_rem -= dt;      
-    }
-    
+  {    
     if(t_rem < 0)
-    {
-      if(t_que.size() > 0)
+    {             
+      if(curr_task < t_que.size())
       {
-        t_rem = t_que.get(0);
-        t_que.remove(0);
+        t_rem = t_que.get(curr_task);
+              
+        //t_que.remove(0);
         curr_task++;
       }
       else
@@ -61,15 +61,9 @@ class Timer
         isPaused = true;
       }
     }
-    
-    if(t_que.size() > 0 && t_rem < 0)
+    else if(!isPaused)
     {
-      t_rem = t_que.get(0);
-      t_que.remove(0);
-    }    
-    else if(t_que.size() == 0 && t_rem < 0)
-    {
-      isPaused = true;
+       t_rem -= dt;
     }
     
   }
@@ -84,7 +78,7 @@ class Timer
     return t_rem;
   }
   
-  public float GetLaneId()
+  public int GetLaneId()
   {
     return lane_id;
   }
