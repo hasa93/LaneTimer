@@ -28,6 +28,11 @@ class TimerController
     timers.get(timer_id).PushTime(task_time);
   }
    
+  public void ClearTimer(int timer_id)
+  {
+    timers.get(timer_id).ClearTimer();
+  }
+     
   public void PauseTimer(int timer_id)
   {
     timers.get(timer_id).PauseTimer();

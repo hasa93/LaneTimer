@@ -4,7 +4,7 @@ class Timer
   private float t_rem;
   private int lane_id;
   private int curr_task;
-  private Boolean isPaused = true;
+  private boolean isPaused = true;
  
   public Timer(int lane_id)
   {
@@ -25,10 +25,13 @@ class Timer
     isPaused = true;    
   }
   
-  public void ClearTasks()
+  public void ClearTimer()
   {
+    isPaused = true;
+    
     t_que.clear();
     t_rem = 0.0f;
+    curr_task = 0;
   }
   
   public void StartTimer()
@@ -37,8 +40,6 @@ class Timer
     {
       t_rem = t_que.get(curr_task);
       curr_task++;
-      
-      //t_que.remove(0);
     }
     
     isPaused = false;    
@@ -51,8 +52,7 @@ class Timer
       if(curr_task < t_que.size())
       {
         t_rem = t_que.get(curr_task);
-              
-        //t_que.remove(0);
+      
         curr_task++;
       }
       else
